@@ -1,0 +1,91 @@
+@startuml
+
+
+
+
+interface FileSystemItem{
+    + String getName()
+    + String getPath()
+}
+
+class File implements FileSystemItem{
+    + String getName()
+    + String getPath()
+}
+
+class Directory implements FileSystemItem {
+    + void addItem(FileSystemItem item)
+    + void removeItem(FileSystemItem item)
+    + String getName();
+    + String getPath();
+}
+
+interface Command {
+    + void execute()
+}
+
+class LsCommand implements Command {
+    - Directory currentDirectory
+    - String order
+    + LsCommand(Directory currentDirectory, String order)
+    + void execute()
+}
+
+class CdCommand implements Command {
+    - Directory currentDirectory
+    - String path
+    + CdCommand(Directory currentDirectory, String path)
+    + void execute()
+}
+
+class TouchCommand implements Command{
+    - Directory currentDirectory
+    - String fileName
+    + TouchCommand(Directory currentDirectory, String fileName)
+    + void execute()
+}
+
+class MkdirCommand implements Command{
+    - Directory currentDirectory
+    - String dirName
+    + MkdirCommand(Directory currentDirectory, String dirName)
+    + void execute()
+}
+
+class RmCommand implements Command {
+    - Directory currentDirectory
+    - String itemName
+    - boolean recursive
+    + RmCommand(Directory currentDirectory, String itemName, boolean recursive)
+    + void execute()
+}
+
+class PwdCommand implements Command{
+    - Directory currentDirectory
+    + PwdCommand(Directory currentDirectory)
+    + void execute()
+}
+
+class CLI {
+    - Directory root
+    - Directory currentDirectory
+    - Map<String, Command> commands
+    + CLI()
+    + void registerCommand(String commandName, Command command)
+    + void executeCommand(String commandName)
+}
+
+
+
+
+
+
+
+
+
+
+
+CLI ----> Command : uses
+CLI --> Directory : manages
+
+@enduml
